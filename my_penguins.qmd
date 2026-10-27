@@ -1,0 +1,38 @@
+---
+title: "my_penguins.qmd"
+format: html
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+
+bill_summary <- penguins |>
+  filter(!is.na(bill_length_mm)) |>          # drop missing values
+  group_by(species) |>
+  summarise(
+    n = n(),
+    avg_bill_length_mm = round(mean(bill_length_mm), 1),
+    sd_bill_length_mm  = round(sd(bill_length_mm), 1),
+    .groups = "drop"
+  )
+
+print(bill_summary)
+
+ggplot(penguins, aes(x = species, y = bill_length_mm, fill = species)) +
+  geom_boxplot(outlier.alpha = 0.5) +
+  geom_jitter(width = 0.15, alpha = 0.4, size = 1.5) +   # optional points
+  labs(
+    title = "Bill Length by Penguin Species",
+    x = "Species",
+    y = "Bill Length (mm)",
+    fill = "Species"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
